@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Ülker Stadyumu</title>
+
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+
+</head>
+
+<body>
+
+    <canvas id="renderCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById("renderCanvas"); // Kanvas öğesini alın
+
+        const engine = new BABYLON.Engine(canvas, true); // BABYLON 3D motorunu oluştur
+
+        function createScene() {
+
+            const scene = new BABYLON.Scene(engine);
+
+            const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 15, -40), scene);
+
+            camera.setTarget(BABYLON.Vector3.Zero());
+
+            camera.attachControl(canvas, true);
+
+            const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+            light.intensity = 0.6;
+
+
+
+
+            ground = BABYLON.MeshBuilder.CreateGround("ground", {
+                width: 20,
+                height: 20,
+            }, scene);
+
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+
+            var texture = new BABYLON.Texture("textures/yusuf5_texture.jpg", scene);
+
+            material.diffuseTexture = texture;
+
+            ground.material = material;
+
+            // direkler buuu 1
+
+            const cone = BABYLON.MeshBuilder.CreateCylinder("cone", {
+
+                height: 1.1,
+
+                diameterTop: 0.1, // Kale direğinin üst çapını ayarlayın
+
+                diameterBottom: 0.1 // Kale direğinin alt çapını ayarlayın
+
+            }, scene);
+
+            cone.position = new BABYLON.Vector3(-8.90, 0.56, 2.40);
+
+            cone.rotation.y = Math.PI / 2;
+
+
+            //direk 2
+
+
+            const cone2 = BABYLON.MeshBuilder.CreateCylinder("cone", {
+
+                height: 1.1,
+
+                diameterTop: 0.1, // Kale direğinin üst çapını ayarlayın
+
+                diameterBottom: 0.1 // Kale direğinin alt çapını ayarlayın
+
+            }, scene);
+
+            cone2.position = new BABYLON.Vector3(-8.90, 0.56, -2.40);
+
+            cone2.rotation.y = Math.PI / 2;
+
+            //direk 3
+
+            const cone3 = BABYLON.MeshBuilder.CreateCylinder("cone", {
+
+                height: 1.1,
+
+                diameterTop: 0.1, // Kale direğinin üst çapını ayarlayın
+
+                diameterBottom: 0.1 // Kale direğinin alt çapını ayarlayın
+
+            }, scene);
+
+            cone3.position = new BABYLON.Vector3(8.90, 0.56, -2.40);
+
+            cone3.rotation.y = Math.PI / 2;
+
+            //direk 4
+            const cone4 = BABYLON.MeshBuilder.CreateCylinder("cone", {
+
+                height: 1.1,
+
+                diameterTop: 0.1, // Kale direğinin üst çapını ayarlayın
+
+                diameterBottom: 0.1 // Kale direğinin alt çapını ayarlayın
+
+            }, scene);
+
+            cone4.position = new BABYLON.Vector3(8.90, 0.56, 2.40);
+
+            cone4.rotation.y = Math.PI / 2;
+
+
+
+            //direk 5
+            const cone5 = BABYLON.MeshBuilder.CreateCylinder("cone", {
+
+                height: 4.9,
+
+                diameterTop: 0.1, // Kale direğinin üst çapını ayarlayın
+
+                diameterBottom: 0.1 // Kale direğinin alt çapını ayarlayın
+
+            }, scene);
+
+            cone5.position = new BABYLON.Vector3(8.90, 1.1, 0);
+
+            cone5.rotation.x = Math.PI / 2;
+
+
+
+            //direk 6
+            const cone6 = BABYLON.MeshBuilder.CreateCylinder("cone", {
+
+                height: 4.9,
+
+                diameterTop: 0.1, // Kale direğinin üst çapını ayarlayın
+
+                diameterBottom: 0.1 // Kale direğinin alt çapını ayarlayın
+
+            }, scene);
+
+            cone6.position = new BABYLON.Vector3(-8.90, 1.1, 0);
+
+            cone6.rotation.x = Math.PI / 2;
+            // direkler bitti
+
+            const top = BABYLON.MeshBuilder.CreateSphere("top", {
+
+
+                diameter: -0.3,
+
+                segments: 32
+
+            }, scene);
+
+            top.position = new BABYLON.Vector3(0, 0.15, 0);
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+
+            var texture = new BABYLON.Texture("textures/yusuf7_texture.jpg", scene);
+
+            material.diffuseTexture = texture;
+
+            top.material = material;
+
+            texture.uScale = 6;
+
+            texture.vScale = 6;
+
+
+            // Duvar
+            const wallWidth = 20;
+            const wallHeight = 8;
+
+            const wall = BABYLON.MeshBuilder.CreateBox("wall", {
+                width: wallWidth,
+                height: wallHeight,
+                depth: 0.1
+            }, scene);
+            wall.position = new BABYLON.Vector3(0, wallHeight / 2, 10);
+
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+
+            var texture = new BABYLON.Texture("textures/yusuf8_texture.jpg", scene);
+
+            material.diffuseTexture = texture;
+
+            wall.material = material;
+
+
+            // Duvar
+            const wallWidth1 = 20;
+            const wallHeight1 = 8;
+
+            const wall1 = BABYLON.MeshBuilder.CreateBox("wall", {
+                width: wallWidth,
+                height: wallHeight,
+                depth: 0.1
+            }, scene);
+            wall1.position = new BABYLON.Vector3(0, wallHeight / 2, -10);
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+
+            var texture = new BABYLON.Texture("textures/yusuf8_texture.jpg", scene);
+
+            material.diffuseTexture = texture;
+
+            wall1.material = material;
+
+
+            // Duvar
+            const wallWidth2 = 10;
+            const wallHeight2 = 8;
+
+            const wall2 = BABYLON.MeshBuilder.CreateBox("wall", {
+                width: wallWidth,
+                height: wallHeight,
+                depth: 0.1
+            }, scene);
+            wall2.position = new BABYLON.Vector3(-10, wallHeight / 2, 0);
+            wall2.rotation.y = Math.PI / 2;
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+
+            var texture = new BABYLON.Texture("textures/yusuf8_texture.jpg", scene);
+
+            material.diffuseTexture = texture;
+
+            wall2.material = material;
+
+
+
+            // Duvar
+            const wallWidth3 = 20;
+            const wallHeight3 = 8;
+
+            const wall3 = BABYLON.MeshBuilder.CreateBox("wall", {
+                width: wallWidth3,
+                height: wallHeight3,
+                depth: 0.1
+            }, scene);
+            wall3.position = new BABYLON.Vector3(10, wallHeight3 / 2, 0);
+            wall3.rotation.y = Math.PI / 2;
+
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+
+            var texture = new BABYLON.Texture("textures/yusuf8_texture.jpg", scene);
+
+            material.diffuseTexture = texture;
+
+            wall3.material = material;
+
+            // Duvar
+            const wallWidth4 = 20;
+            const wallHeight4 = 4;
+
+            const wall4 = BABYLON.MeshBuilder.CreateBox("wall", {
+                width: wallWidth4,
+                height: wallHeight4,
+                depth: 0.1
+            }, scene);
+            wall4.position = new BABYLON.Vector3(0, wallHeight4 / 120, 8);
+            wall4.rotation.x = Math.PI / 2
+            wall4.position.y = 8; // Yukarı taşımak için y değerini artırın
+
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+
+            var texture = new BABYLON.Texture("textures/yusuf8_texture.jpg", scene);
+
+            material.diffuseTexture = texture;
+
+            wall4.material = material;
+
+
+            const wallWidth5 = 16;
+            const wallHeight5 = 4;
+
+            const wall5 = BABYLON.MeshBuilder.CreateBox("wall", {
+                width: wallWidth4,
+                height: wallHeight4,
+                depth: 0.1
+            }, scene);
+            wall5.position = new BABYLON.Vector3(0, wallHeight4 / 120, -8);
+            wall5.rotation.x = Math.PI / 2
+            wall5.position.y = 8; // Yukarı taşımak için y değerini artırın
+
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+
+            var texture = new BABYLON.Texture("textures/yusuf8_texture.jpg", scene);
+
+            material.diffuseTexture = texture;
+
+            wall5.material = material;
+
+            const wallWidth6 = 30;
+            const wallHeight6 = 4;
+
+            const wall6 = BABYLON.MeshBuilder.CreateBox("wall", {
+                width: wallWidth4,
+                height: wallHeight4,
+                depth: 0.1
+            }, scene);
+            wall6.position = new BABYLON.Vector3(-8, wallHeight4 / 2, 0);
+            wall6.rotation.x = Math.PI / 2
+            wall6.position.y = 8;
+            wall6.rotation.y = Math.PI / 2;
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+
+            var texture = new BABYLON.Texture("textures/yusuf8_texture.jpg", scene);
+
+            material.diffuseTexture = texture;
+
+            wall6.material = material;
+
+            const wallWidth7 = 30;
+            const wallHeight7 = 4;
+
+            const wall7 = BABYLON.MeshBuilder.CreateBox("wall", {
+                width: wallWidth4,
+                height: wallHeight4,
+                depth: 0.1
+            }, scene);
+            wall7.position = new BABYLON.Vector3(8, wallHeight4 / 2, 0);
+            wall7.rotation.x = Math.PI / 2
+            wall7.position.y = 8;
+            wall7.rotation.y = Math.PI / 2;
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+
+            var texture = new BABYLON.Texture("textures/yusuf8_texture.jpg", scene);
+
+            material.diffuseTexture = texture;
+
+            wall7.material = material;
+
+
+
+
+            // Duvar büyüklüğü
+            var wallWidth8 = 13.2;
+            var wallHeight8 = 13;
+            var wallDepth = 0.1;
+
+            // Duvar oluşturma
+            var wall8 = BABYLON.MeshBuilder.CreateBox("wall", {
+                width: wallWidth8,
+                height: wallHeight8,
+                depth: wallDepth
+            }, scene);
+            wall8.position = new BABYLON.Vector3(8, wallHeight8 / 20, 0);
+            wall8.rotation.x = Math.PI / 2;
+            wall8.position.y = -0.1;
+            wall8.rotation.y = Math.PI / 2;
+            wall8.position.x = -0.1;
+            wall8.position.z = -0.1;
+            // Duvar büyütme
+            var scaleRatio = 1.5; // Büyütme oranı
+            wall8.scaling = new BABYLON.Vector3(scaleRatio, scaleRatio, scaleRatio);
+
+
+
+
+
+            return scene;
+        }
+
+        const scene = createScene(); //createScene işlevini çağırın
+
+        // Sahneyi tekrar tekrar işlemek için bir işleme döngüsü kaydedin
+        engine.runRenderLoop(function () {
+            scene.render();
+        });
+
+        // Tarayıcı/tuval yeniden boyutlandırma olaylarını izleyin
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+    </script>
+
+</body>
+
+</html>

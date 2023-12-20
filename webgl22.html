@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Babylon Template</title>
+
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+
+</head>
+
+<body>
+
+    <canvas id="renderCanvas"></canvas>
+
+    <script>
+        const speed = 0.08;
+
+        const canvas = document.getElementById("renderCanvas"); // Kanvas öğesini alın
+
+        const engine = new BABYLON.Engine(canvas, true); // BABYLON 3D motorunu oluştur
+
+        let hareketYonu = 1;
+
+
+        let light;
+
+
+        function createScene() {
+
+            // Temel bir Babylon Scene nesnesi oluşturur
+
+            const scene = new BABYLON.Scene(engine);
+
+            //Boş bir kamera oluşturur ve konumlandırır
+
+            const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 10, -27), scene);
+
+            // Kamerayı sahne kaynağına hedefler       
+
+            camera.setTarget(BABYLON.Vector3.Zero());
+
+            // Bu, kamerayı tuvale ekler          
+
+            camera.attachControl(canvas, true);
+            //kutu
+
+            box = BABYLON.MeshBuilder.CreateBox("box", {
+
+                diameter: 2,
+
+                segments: 1
+
+            }, scene);
+
+
+            box.position = new BABYLON.Vector3(0, 0.5, 0)
+
+            // 1. ışık ve gölge
+
+            light1 = new BABYLON.SpotLight("spotLight", new BABYLON.Vector3(-4, 4, 4), new BABYLON.Vector3(0, -1, 0),
+                Math.PI / 5, 2, scene);
+
+            light1.intensity = 0.2;
+
+            shadowGenerator1 = new BABYLON.ShadowGenerator(500, light1);
+
+            shadowGenerator1.useBlurExponentialShadowMap = true;
+
+            shadowGenerator1.addShadowCaster(box);
+
+            targetPosition = new BABYLON.Vector3(0, -1, 1);
+
+            light1.setDirectionToTarget(targetPosition);
+
+
+
+            // 2. ışık ve gölge
+
+
+            light2 = new BABYLON.SpotLight("spotLight", new BABYLON.Vector3(4, 4, 4), new BABYLON.Vector3(0, -1, 0),
+
+                Math.PI / 5, 2, scene);
+
+            light2.intensity = 0.2;
+
+            shadowGenerator2 = new BABYLON.ShadowGenerator(500, light2);
+
+            shadowGenerator2.useBlurExponentialShadowMap = true;
+
+            shadowGenerator2.addShadowCaster(box);
+
+            targetPosition = new BABYLON.Vector3(0, -1, 0);
+
+            light2.setDirectionToTarget(targetPosition);
+
+            // 3. ışık ve gölge
+
+            light3 = new BABYLON.SpotLight("spotLight", new BABYLON.Vector3(-4, 4, -4), new BABYLON.Vector3(0, -1, 0),
+
+                Math.PI / 5, 2, scene);
+
+            light3.intensity = 0.2;
+
+            shadowGenerator3 = new BABYLON.ShadowGenerator(500, light3);
+
+            shadowGenerator3.useBlurExponentialShadowMap = true;
+
+            shadowGenerator3.addShadowCaster(box);
+
+            targetPosition = new BABYLON.Vector3(0, -1, 0);
+
+            light3.setDirectionToTarget(targetPosition);
+
+            // 4. ışık ve gölge
+
+            light4 = new BABYLON.SpotLight("spotLight", new BABYLON.Vector3(4, 4, -4), new BABYLON.Vector3(0, -1, 0),
+           
+            Math.PI / 5, 2, scene);
+           
+            light4.intensity = 0.2;
+           
+            shadowGenerator4 = new BABYLON.ShadowGenerator(500, light4);
+           
+            shadowGenerator4.useBlurExponentialShadowMap = true;
+           
+            shadowGenerator4.addShadowCaster(box);
+           
+            targetPosition = new BABYLON.Vector3(0, -1, 0);
+           
+            light4.setDirectionToTarget(targetPosition);
+
+            // BURAYA OBJELER GELECEK
+
+            const ground = BABYLON.MeshBuilder.CreateGround("ground", {
+
+                width: 11,
+
+                height: 11,
+
+            }, scene);
+
+            ground.receiveShadows = true;
+
+
+
+            scene.onKeyboardObservable.add((kbInfo) => {
+
+
+
+            });
+
+
+            return scene;
+        };
+
+        const scene = createScene(); //createScene işlevini çağırın
+
+
+
+        // Sahneyi tekrar tekrar işlemek için bir işleme döngüsü kaydedin
+
+        engine.runRenderLoop(function () {
+
+
+
+
+
+
+            // BURAYA ANİMASYON GELECEK
+
+
+
+
+
+            scene.render();
+        });
+
+        // Tarayıcı/tuval yeniden boyutlandırma olaylarını izleyin
+
+        window.addEventListener("resize", function () {
+
+            engine.resize();
+        });
+    </script>
+
+</body>
+
+</html>

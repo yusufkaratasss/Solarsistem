@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Babylon Template</title>
+
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+
+</head>
+
+<body>
+
+    <canvas id="renderCanvas"></canvas>
+
+    <script>
+        let light;
+
+        const speed = 0.2;
+
+        const canvas = document.getElementById("renderCanvas"); // Kanvas öğesini alın
+
+        const engine = new BABYLON.Engine(canvas, true); // BABYLON 3D motorunu oluştur
+
+        let hareketYonu = 1;
+
+
+
+
+
+
+        function isik1Hareket() {
+
+            if (hareketYonu === 1) {
+
+                light.position.x += speed;
+
+                if (light.position.x >= 4) {
+
+                    hareketYonu = 2;
+
+                }
+
+            } else if (hareketYonu === 2) {
+
+                light.position.z -= speed;
+
+                if (light.position.z <= -5) {
+
+                    hareketYonu = 3;
+
+                }
+
+            } else if (hareketYonu === 3) {
+
+                light.position.x -= speed;
+
+                if (light.position.x <= -5) {
+
+                    hareketYonu = 4;
+
+                }
+
+            } else if (hareketYonu === 4) {
+
+                light.position.z += speed;
+
+                if (light.position.z >= 4) {
+
+                    hareketYonu = 1;
+                }
+            }
+        }
+
+
+
+
+
+        function createScene() {
+
+            // Temel bir Babylon Scene nesnesi oluşturur
+
+            const scene = new BABYLON.Scene(engine);
+
+            //Boş bir kamera oluşturur ve konumlandırır
+
+            const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 10, -27), scene);
+
+            // Kamerayı sahne kaynağına hedefler       
+
+            camera.setTarget(BABYLON.Vector3.Zero());
+
+            // Bu, kamerayı tuvale ekler          
+
+            camera.attachControl(canvas, true);
+
+            // Gökyüzüne 0,1,0 hedefleyen bir ışık oluşturur
+
+            // isik
+
+            light = new BABYLON.SpotLight("spotLight", new BABYLON.Vector3(-4, 5, 4), new BABYLON.Vector3(0, -1, 0),
+                Math.PI / 3, 2, scene);
+
+            // Gökyüzüne 0,1,0 hedefleyen bir ışık oluşturur
+
+
+            // Işığı az miktarda kısın - 0'dan 1'e
+
+            light.intensity = 0.9;
+
+            var lightSphere = BABYLON.MeshBuilder.CreateSphere("lightSphere", {
+
+                segments: 16,
+
+                diameter: 0.5,
+
+            }, scene);
+
+            lightSphere.position = light.position;
+
+            var lightSphereMtl = new BABYLON.StandardMaterial("lightSphereMtl", scene);
+
+            lightSphereMtl.emissiveColor = BABYLON.Color3.Yellow();
+
+            lightSphereMtl.disableLighting = true;
+
+            lightSphere.material = lightSphereMtl;
+
+
+
+            // BURAYA OBJELER GELECEK
+
+            const ground = BABYLON.MeshBuilder.CreateGround("ground", {
+
+                width: 11,
+
+                height: 11,
+
+            }, scene);
+
+
+            const box = BABYLON.MeshBuilder.CreateBox("box", {
+
+                diameter: 2,
+
+                segments: 1
+
+            }, scene);
+
+            box.position = new BABYLON.Vector3(-2, 3, 0)
+
+            const box2 = BABYLON.MeshBuilder.CreateBox("box", {
+
+                diameter: 2,
+
+                segments: 1
+
+            }, scene);
+
+            box2.position = new BABYLON.Vector3(2, 3, 0)
+
+
+            scene.onKeyboardObservable.add((kbInfo) => {
+
+                if (kbInfo.type === BABYLON.KeyboardEventTypes.KEYDOWN && (kbInfo.event.key === "a" || kbInfo
+
+                        .event.key === "A")) {
+
+                    box.position.x += -0.1;
+
+                } else if (kbInfo.type === BABYLON.KeyboardEventTypes.KEYDOWN && (kbInfo.event.key === "w" ||
+
+                        kbInfo.event.key === "W")) {
+
+                    box.position.z -= -0.1;
+
+                } else if (kbInfo.type === BABYLON.KeyboardEventTypes.KEYDOWN && (kbInfo.event.key === "s" ||
+                        kbInfo.event.key === "S")) {
+
+                    box.position.z += -0.1;
+
+                } else if (kbInfo.type === BABYLON.KeyboardEventTypes.KEYDOWN && (kbInfo.event.key === "d" ||
+                        kbInfo.event.key === "D")) {
+
+                    box.position.x -= -0.1;
+                }
+
+
+
+            });
+
+
+            return scene;
+        };
+
+        const scene = createScene(); //createScene işlevini çağırın
+
+
+
+        // Sahneyi tekrar tekrar işlemek için bir işleme döngüsü kaydedin
+
+        engine.runRenderLoop(function () {
+
+            isik1Hareket();
+
+
+
+
+            // BURAYA ANİMASYON GELECEK
+
+
+
+
+
+            scene.render();
+        });
+
+        // Tarayıcı/tuval yeniden boyutlandırma olaylarını izleyin
+
+        window.addEventListener("resize", function () {
+
+            engine.resize();
+        });
+    </script>
+
+</body>
+
+</html>

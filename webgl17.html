@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Babylon Template</title>
+
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+
+</head>
+
+<body>
+
+    <canvas id="renderCanvas"></canvas>
+
+    <script>
+        let light;
+
+        const speed = 0.2;
+
+        const canvas = document.getElementById("renderCanvas"); // Kanvas öğesini alın
+
+        const engine = new BABYLON.Engine(canvas, true); // BABYLON 3D motorunu oluştur
+
+        let hareketYonu = 1;
+
+
+
+
+        function isik1Hareket() {
+
+            if (hareketYonu === 1) {
+               
+                light.position.x += speed;
+               
+                light.setDirectionToTarget(box.position);
+               
+                if (light.position.x >= 5) {
+               
+                    hareketYonu = 2;
+               
+                }
+            } 
+            else if (hareketYonu === 2) {
+            
+                light.position.x -= speed;
+            
+                light.setDirectionToTarget(box2.position);
+            
+                if (light.position.x <= -5) {
+            
+                    hareketYonu = 1;
+            
+                }
+            }
+
+            targetPosition = new BABYLON.Vector3(0, -1, 0);
+
+            light.setDirectionToTarget(targetPosition);
+
+        }
+
+        function createScene() {
+
+            // Babylon Scene nesnesi oluşturulur
+
+            const scene = new BABYLON.Scene(engine);
+
+            // Boş bir kamera oluşturulur ve konumlandırılır
+
+            const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 10, -27), scene);
+
+            // Kamerayı sahne kaynağına hedeflenir
+
+            camera.setTarget(BABYLON.Vector3.Zero());
+
+            // Bu kamerayı tuvale ekler
+
+            camera.attachControl(canvas, true);
+
+            // Gökyüzüne 0,1,0 hedefleyen bir ışık oluşturur
+
+            light = new BABYLON.SpotLight("spotLight", new BABYLON.Vector3(0, 5, 0), new BABYLON.Vector3(1, 1, 1),
+
+                Math.PI / 3, 2, scene);
+
+         
+
+
+            // Işığı az miktarda kısın - 0'dan 1'e
+
+            light.intensity = 0.9;
+
+            // Küre şeklinde bir ışık nesnesi oluşturur
+
+            lightSphere = BABYLON.MeshBuilder.CreateSphere("lightSphere", {
+
+                segments: 16,
+
+                diameter: 0.5
+
+            }, scene);
+
+            lightSphere.position = light.position;
+
+            lightSphereMtl = new BABYLON.StandardMaterial("lightSphereMtl", scene);
+
+
+            lightSphereMtl.emissiveColor = BABYLON.Color3.Yellow();
+
+            lightSphereMtl.disableLighting = true;
+
+            lightSphere.material = lightSphereMtl;
+
+            // Yerde bir zemin oluşturur
+
+            ground = BABYLON.MeshBuilder.CreateGround("ground", {
+
+                width: 11,
+
+                height: 11
+
+            }, scene);
+
+
+
+            // İki kutu oluşturur
+
+            box = BABYLON.MeshBuilder.CreateBox("box", {
+
+                diameter: 2,
+
+
+                segments: 1
+
+            }, scene);
+
+            box.position = new BABYLON.Vector3(-2, 3, 0);
+
+            box2 = BABYLON.MeshBuilder.CreateBox("box", {
+
+                diameter: 2,
+
+                segments: 1
+
+
+            }, scene);
+
+            box2.position = new BABYLON.Vector3(2, 3, 0);
+
+
+
+
+            // Scene nesnesini döndürür
+
+            return scene;
+        }
+
+
+
+        const scene = createScene(); //createScene işlevini çağırın
+
+
+
+        // Sahneyi tekrar tekrar işlemek için bir işleme döngüsü kaydedin
+
+        engine.runRenderLoop(function () {
+
+            isik1Hareket();
+
+
+
+
+            // BURAYA ANİMASYON GELECEK
+
+
+
+
+
+            scene.render();
+        });
+
+        // Tarayıcı/tuval yeniden boyutlandırma olaylarını izleyin
+
+        window.addEventListener("resize", function () {
+
+            engine.resize();
+        });
+    </script>
+
+</body>
+
+</html>

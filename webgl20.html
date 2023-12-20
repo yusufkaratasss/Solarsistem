@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Babylon Template</title>
+
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+
+</head>
+
+<body>
+
+    <canvas id="renderCanvas"></canvas>
+
+    <script>
+        const speed = 0.08;
+
+        const canvas = document.getElementById("renderCanvas"); // Kanvas öğesini alın
+
+        const engine = new BABYLON.Engine(canvas, true); // BABYLON 3D motorunu oluştur
+
+        let hareketYonu = 1;
+
+
+        let light;
+
+       
+
+        function createScene() {
+
+            // Temel bir Babylon Scene nesnesi oluşturur
+
+            const scene = new BABYLON.Scene(engine);
+
+            //Boş bir kamera oluşturur ve konumlandırır
+
+            const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 10, -27), scene);
+
+            // Kamerayı sahne kaynağına hedefler       
+
+            camera.setTarget(BABYLON.Vector3.Zero());
+
+            // Bu, kamerayı tuvale ekler          
+
+            camera.attachControl(canvas, true);
+
+            // Gökyüzüne 0,1,0 hedefleyen bir ışık oluşturur
+
+            const light = new BABYLON.SpotLight("spotLight", new BABYLON.Vector3(-4, 4, 2), new BABYLON.Vector3(2, -1, -1), Math.PI / 3, 2, scene);
+
+            light.intensity = 0.9;
+
+            //light.setDirectionToTarget(new BABYLON.Vector3.Zero);
+
+            lightSphere = BABYLON.MeshBuilder.CreateSphere("lightSphere", {
+
+                segments: 16,
+
+                diameter: 0.5
+
+            }, scene);
+
+            lightSphere.position = light.position;
+
+            var lightSphereMtl = new BABYLON.StandardMaterial("lightSphereMtl", scene);
+
+            lightSphereMtl.emissiveColor = BABYLON.Color3.Yellow();
+
+            lightSphereMtl.disableLighting = true;
+
+            lightSphere.material = lightSphereMtl;
+
+            //kutu
+
+            box = BABYLON.MeshBuilder.CreateBox("box", {
+
+                diameter: 2,
+
+                segments: 1
+
+            }, scene);
+
+            box.position = new BABYLON.Vector3(0, 0.5, 0)
+
+            //gölge
+
+            shadowGenerator = new BABYLON.ShadowGenerator(512, light);
+
+            shadowGenerator.useBlurExponentialShadowMap = true;
+
+            shadowGenerator.addShadowCaster(box);
+
+
+
+
+            // BURAYA OBJELER GELECEK
+
+            const ground = BABYLON.MeshBuilder.CreateGround("ground", {
+
+                width: 11,
+
+                height: 11,
+
+            }, scene);
+
+            ground.receiveShadows = true;
+
+
+
+            scene.onKeyboardObservable.add((kbInfo) => {
+
+
+
+            });
+
+
+            return scene;
+        };
+
+        const scene = createScene(); //createScene işlevini çağırın
+
+
+
+        // Sahneyi tekrar tekrar işlemek için bir işleme döngüsü kaydedin
+
+        engine.runRenderLoop(function () {
+
+
+           
+
+
+
+            // BURAYA ANİMASYON GELECEK
+
+
+
+
+
+            scene.render();
+        });
+
+        // Tarayıcı/tuval yeniden boyutlandırma olaylarını izleyin
+
+        window.addEventListener("resize", function () {
+
+            engine.resize();
+        });
+    </script>
+
+</body>
+
+</html>

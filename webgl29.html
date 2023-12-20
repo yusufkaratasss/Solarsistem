@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Babylon Template</title>
+
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+
+</head>
+
+<body>
+
+    <canvas id="renderCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById("renderCanvas");
+        const engine = new BABYLON.Engine(canvas, true);
+
+        let car;
+        let carRotationSpeed = 0;
+
+        function createScene() {
+
+            const scene = new BABYLON.Scene(engine);
+
+            const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(2, 5, -30), scene);
+
+            camera.setTarget(BABYLON.Vector3.Zero());
+
+            camera.attachControl(canvas, true);
+
+            const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+            light.intensity = 0.5;
+
+            const carWidth = 3;
+
+            const carHeight = 1.1;
+
+            const carDepth = 6;
+
+            car = BABYLON.MeshBuilder.CreateBox("car", {
+
+                width: carWidth,
+
+                height: carHeight,
+
+                depth: carDepth
+
+            }, scene);
+
+            car.position = new BABYLON.Vector3(0, 0.6, 0);
+
+            car.rotation.y = Math.PI / 2;
+
+
+
+            const carMaterial = new BABYLON.StandardMaterial("carMaterial", scene);
+
+            carMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+
+            car.material = carMaterial;
+
+            const box = BABYLON.MeshBuilder.CreateBox("box", {
+
+                diameter: 5,
+
+                segments: 1
+            }, scene);
+
+
+
+            box.position = new BABYLON.Vector3(0, 1, 0)
+
+            const material2 = new BABYLON.StandardMaterial("box", scene);
+
+            material2.diffuseColor = new BABYLON.Color3(0.2, 0.4, 0.2);
+
+            box.material = material2;
+
+            box.parent = car;
+         
+            const cone = BABYLON.MeshBuilder.CreateCylinder("cone", {
+         
+                height: 4
+         
+            }, scene);
+
+            cone.position = new BABYLON.Vector3(0, -0.1, 2);
+
+            cone.rotation.z = Math.PI / 2;
+
+            const material1 = new BABYLON.StandardMaterial("cone", scene);
+         
+            material1.diffuseColor = new BABYLON.Color3(0.8, 0.2, 0.2);
+
+            cone.material = material1;
+
+            cone.parent = car;
+
+
+
+            const cone2 = BABYLON.MeshBuilder.CreateCylinder("cone", {
+
+                height: 4
+
+            }, scene);
+
+            cone2.position = new BABYLON.Vector3(0, -0.1, -2);
+
+            cone2.rotation.z = Math.PI / 2;
+
+            const material3 = new BABYLON.StandardMaterial("cone2", scene);
+
+            material3.diffuseColor = new BABYLON.Color3(0.1, 0.3, 0.5);
+
+            cone2.material = material3;
+
+            cone2.parent = car;
+
+            scene.onKeyboardObservable.add((kbInfo) => {
+
+                if (kbInfo.type === BABYLON.KeyboardEventTypes.KEYDOWN) {
+
+                    switch (kbInfo.event.key) {
+
+                        case "a":
+
+                        case "A":
+
+                            carRotationSpeed = -0.05;
+
+                            break;
+
+                        case "d":
+
+                        case "D":
+
+                            carRotationSpeed = 0.05;
+
+                            break;
+
+                    }
+
+                } else if (kbInfo.type === BABYLON.KeyboardEventTypes.KEYUP) {
+
+                    carRotationSpeed = 0;
+
+                }
+            });
+
+            const ground = BABYLON.MeshBuilder.CreateGround("ground", {
+
+                width: 1000,
+
+                height: 30,
+
+            }, scene);
+
+            return scene;
+        }
+
+        const scene = createScene();
+
+        const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(2, 5, -30), scene);
+
+        const followCamera = new BABYLON.FollowCamera("followCamera", new BABYLON.Vector3(0, 5, -10), scene);
+
+        followCamera.radius = 20;
+
+        followCamera.heightOffset = 5;
+
+        followCamera.rotationOffset =  180;
+
+        followCamera.cameraAcceleration = 0.05;
+
+        followCamera.maxCameraSpeed = 20;
+
+        followCamera.lockedTarget = car;
+
+        scene.activeCamera = followCamera;
+
+        followCamera.lockedTarget = car;
+
+        scene.activeCamera = followCamera;
+
+
+
+        engine.runRenderLoop(function () {
+
+            car.rotation.y += carRotationSpeed;
+
+            car.moveWithCollisions(car.forward.scaleInPlace(0.9));
+
+            scene.render();
+
+        });
+
+        window.addEventListener("resize", function () {
+
+            engine.resize();
+
+        });
+
+
+        engine.runRenderLoop(function () {
+
+            car.rotation.y += carRotationSpeed;
+
+            car.moveWithCollisions(car.forward.scaleInPlace(0.1));
+
+            scene.render();
+
+        });
+
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+    </script>
+
+</body>
+
+</html>

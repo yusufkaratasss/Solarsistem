@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Babylon Template</title>
+
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+
+</head>
+
+<body>
+
+    <canvas id="renderCanvas"></canvas>
+
+    <script>
+        let sphere2;
+
+        const canvas = document.getElementById("renderCanvas"); // Kanvas öğesini alın
+
+        const engine = new BABYLON.Engine(canvas, true); // BABYLON 3D motorunu oluştur
+
+        function createScene() {
+
+            const scene = new BABYLON.Scene(engine);
+
+
+            const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+
+            camera.setTarget(BABYLON.Vector3.Zero());
+
+            camera.attachControl(canvas, true);
+
+            const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+            light.intensity = 0.6;
+
+            ground = BABYLON.MeshBuilder.CreateGround("ground", {
+                width: 10,
+                height: 10,
+            }, scene);
+
+            ground2 = BABYLON.MeshBuilder.CreateGround("ground2", {
+
+                width: 5,
+
+                height: 6,
+
+            }, scene);
+
+            ground2.position.y = 0.01;
+
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+
+            var texture = new BABYLON.Texture("textures/yusuf2_texture.jpg", scene);
+
+            material.diffuseTexture = texture;
+
+            ground.material = material;
+            
+            texture.uScale = 6;
+        
+            texture.vScale = 6;
+
+            // diger materyal
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+        
+            var texture = new BABYLON.Texture("textures/yusuf3_texture.jpg", scene);
+        
+            material.diffuseTexture = texture;
+        
+            ground2.material = material;
+
+
+
+            // obje
+
+            const carWidth = 1;
+
+            const carHeight = 0.1;
+
+            const carDepth = 0.1;
+
+            car = BABYLON.MeshBuilder.CreateBox("car", {
+
+                width: carWidth,
+
+                height: carHeight,
+
+                depth: carDepth
+
+            }, scene);
+
+            car.position = new BABYLON.Vector3(-1, 0.6, -2);
+
+            car.rotation.z = Math.PI / 2;
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+
+            var texture = new BABYLON.Texture("textures/yusuf4_texture.jpg", scene);
+
+            material.diffuseTexture = texture;
+
+            car.material = material;
+
+
+
+            const carWidth1 = 1;
+
+            const carHeight1 = 0.1;
+
+            const carDepth1 = 0.1;
+
+            car1 = BABYLON.MeshBuilder.CreateBox("car", {
+
+                width: carWidth1,
+
+                height: carHeight1,
+
+                depth: carDepth1,
+
+            }, scene);
+
+            car1.position = new BABYLON.Vector3(-1, 0.6, 0);
+
+            car1.rotation.z = Math.PI / 2;
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+
+            var texture = new BABYLON.Texture("textures/yusuf4_texture.jpg", scene);
+
+            material.diffuseTexture = texture;
+
+            car1.material = material;
+
+
+
+            const carWidth2 = 1;
+
+            const carHeight2 = 0.1;
+
+            const carDepth2 = 0.1;
+
+            car2 = BABYLON.MeshBuilder.CreateBox("car", {
+
+                width: carWidth2,
+
+                height: carHeight2,
+
+                depth: carDepth2,
+
+            }, scene);
+
+            car2.position = new BABYLON.Vector3(1, 0.6, 0);
+
+            car2.rotation.z = Math.PI / 2;
+
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+
+            var texture = new BABYLON.Texture("textures/yusuf4_texture.jpg", scene);
+
+            material.diffuseTexture = texture;
+
+            car2.material = material;
+
+
+
+
+            const carWidth3 = 1;
+
+            const carHeight3 = 0.1;
+
+            const carDepth3 = 0.1;
+
+            car3 = BABYLON.MeshBuilder.CreateBox("car", {
+
+                width: carWidth3,
+
+                height: carHeight3,
+
+                depth: carDepth3,
+
+            }, scene);
+
+            car3.position = new BABYLON.Vector3(1, 0.6, -2);
+
+            car3.rotation.z = Math.PI / 2;
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+
+            var texture = new BABYLON.Texture("textures/yusuf4_texture.jpg", scene);
+
+            material.diffuseTexture = texture;
+
+            car3.material = material;
+
+
+
+            const carWidth4 = 2.1;
+
+            const carHeight4 = 0.1;
+
+            const carDepth4 = 2.1;
+
+            car4 = BABYLON.MeshBuilder.CreateBox("car", {
+
+                width: carWidth4,
+
+                height: carHeight4,
+
+                depth: carDepth4,
+
+            }, scene);
+
+            car4.position = new BABYLON.Vector3(0, 1.1, -1);
+
+            car4.rotation.y = Math.PI / 2;
+
+            var material = new BABYLON.StandardMaterial("myMaterial", scene);
+
+            var texture = new BABYLON.Texture("textures/yusuf4_texture.jpg", scene);
+
+            material.diffuseTexture = texture;
+
+            car4.material = material;
+
+            return scene;
+        }
+
+        const scene = createScene(); //createScene işlevini çağırın
+
+        // Sahneyi tekrar tekrar işlemek için bir işleme döngüsü kaydedin
+
+        engine.runRenderLoop(function () {
+
+            scene.render();
+
+        });
+
+        // Tarayıcı/tuval yeniden boyutlandırma olaylarını izleyin
+
+        window.addEventListener("resize", function () {
+
+            engine.resize();
+
+        });
+    </script>
+
+</body>
+
+</html>

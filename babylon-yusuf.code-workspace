@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../babylon-yusuf"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "textures"
+	}
+}

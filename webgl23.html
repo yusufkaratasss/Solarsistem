@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Babylon Template</title>
+
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+
+
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="src/index.js"></script>
+</head>
+
+<body>
+
+    <canvas id="renderCanvas"></canvas>
+
+    <script>
+        speed = 0.2;
+
+        canvas = document.getElementById("renderCanvas"); // Kanvas öğesini alın
+
+        engine = new BABYLON.Engine(canvas, true); // BABYLON 3D motorunu oluştur
+
+        let hareketYonu = 1;
+
+
+        function createScene() {
+
+            // Temel bir Babylon Scene nesnesi oluşturur
+
+            const scene = new BABYLON.Scene(engine);
+
+            //Boş bir kamera oluşturur ve konumlandırır
+
+            const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(100, 60, -450), scene);
+
+            // Kamerayı sahne kaynağına hedefler       
+
+            camera.setTarget(BABYLON.Vector3.Zero());
+
+            // Bu, kamerayı tuvale ekler          
+
+            camera.attachControl(canvas, true);
+
+
+            
+            // Gökyüzüne 0,1,0 hedefleyen bir ışık oluşturur
+
+            // isik
+
+            const light = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(50, 5, 1), scene);
+
+            light.intensity = 0.9;
+
+            var lightSphere = BABYLON.MeshBuilder.CreateSphere("lightSphere", {
+
+               segments: 6,
+
+                diameter: 22,
+
+            }, scene);
+
+            lightSphere.position = light.position;
+
+            var lightSphereMtl = new BABYLON.StandardMaterial("lightSphereMtl", scene);
+
+            lightSphereMtl.emissiveColor = BABYLON.Color3.Yellow();
+
+            lightSphereMtl.disableLighting = true;
+
+            lightSphere.material = lightSphereMtl;
+
+
+
+
+
+
+            // BURAYA OBJELER GELECEK
+
+
+            skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {
+                size: 1800.0
+            }, scene);
+
+            skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+
+            skyboxMaterial.backFaceCulling = false;
+
+            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/skybox", scene);
+
+            skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+
+            skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+
+            skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+
+            skybox.material = skyboxMaterial;
+
+
+            //  gezegen 1
+
+            const dunya = BABYLON.MeshBuilder.CreateSphere("dünya", {
+
+                diameter: 18,
+
+               segments: 6
+
+            }, scene);
+
+            dunya.position = new BABYLON.Vector3(-19, 0.5, 0)
+
+            const material1 = new BABYLON.StandardMaterial("dünya", scene);
+
+            material1.diffuseColor = new BABYLON.Color3(1, 2, 3);
+
+            dunya.material = material1;
+
+            scene.registerAfterRender(() => {
+
+                radius = 150;
+
+                angle = performance.now() / 2500;
+
+                x = light.position.x + radius * Math.cos(angle);
+
+                y = light.position.y;
+
+                z = light.position.z + radius * Math.sin(angle);
+
+                dunya.position = new BABYLON.Vector3(x, y, z);
+
+            });
+
+
+            //  gezegen 2
+
+            const merkür = BABYLON.MeshBuilder.CreateSphere("merkür", {
+
+
+                diameter: 12,
+
+               segments: 6
+
+            }, scene);
+
+            merkür.position = new BABYLON.Vector3(-40, 0.5, 0);
+
+            const material7 = new BABYLON.StandardMaterial("merkür", scene);
+
+            material7.diffuseColor = new BABYLON.Color3(0.1, 0.5, 0.5);
+
+            merkür.material = material7;
+
+
+            scene.registerAfterRender(() => {
+
+                radius = 70;
+
+                angle = performance.now() / 730;
+
+                x = light.position.x + radius * Math.cos(angle);
+
+                y = light.position.y;
+
+                z = light.position.z + radius * Math.sin(angle);
+
+                merkür.position = new BABYLON.Vector3(x, y, z);
+            });
+
+            //  gezegen 3
+
+
+            const pluton = BABYLON.MeshBuilder.CreateSphere("pluton", {
+
+                diameter: 11,
+
+               segments: 6
+
+            }, scene);
+
+            pluton.position = new BABYLON.Vector3(-70, 0.5, 0)
+
+            const material6 = new BABYLON.StandardMaterial("pluton", scene);
+
+            material6.diffuseColor = new BABYLON.Color3(0.99, 0.96, 0.83);
+
+            pluton.material = material6;
+
+            scene.registerAfterRender(() => {
+
+                radius = 500;
+
+                angle = performance.now() / 20000;
+
+                x = light.position.x + radius * Math.cos(angle);
+
+                y = light.position.y;
+
+                z = light.position.z + radius * Math.sin(angle);
+
+                pluton.position = new BABYLON.Vector3(x, y, z);
+
+            });
+
+            //  gezegen 4
+
+
+            const saturn = BABYLON.MeshBuilder.CreateSphere("satürn", {
+
+                diameter: 20,
+
+               segments: 6
+
+            }, scene);
+
+            saturn.position = new BABYLON.Vector3(-300, 0.5, 0);
+
+            const material = new BABYLON.StandardMaterial("satürn", scene);
+
+            material.diffuseColor = new BABYLON.Color3(0.4, 0.6, 1.0);
+
+            saturn.material = material;
+
+            scene.registerAfterRender(() => {
+
+                radius = 340;
+
+                angle = performance.now() / 8000;
+
+
+                x = light.position.x - radius * Math.cos(angle);
+
+                y = light.position.y;
+
+                z = light.position.z - radius * Math.sin(angle);
+
+                saturn.position = new BABYLON.Vector3(x, y, z);
+
+            });
+
+
+            //  gezegen 5
+
+            const saturnhalkasi = BABYLON.MeshBuilder.CreateDisc("satürn", {
+
+                radius: 22,
+
+               segments: 6
+
+
+            }, scene);
+
+            saturnhalkasi.position = new BABYLON.Vector3(-300, 0.5, 0);
+
+            saturnhalkasi.rotation.x = Math.PI / 2;
+
+
+            const material5 = new BABYLON.StandardMaterial("satürn", scene);
+
+            material5.diffuseColor = new BABYLON.Color3(0.4, 0.3, 0.3);
+
+            saturnhalkasi.material = material5;
+
+
+            scene.registerAfterRender(() => {
+
+                radius = 340;
+
+                angle = performance.now() / 8000;
+
+
+                x = light.position.x - radius * Math.cos(angle);
+
+                y = light.position.y;
+
+                z = light.position.z - radius * Math.sin(angle);
+
+                saturnhalkasi.position = new BABYLON.Vector3(x, y, z);
+
+            });
+
+
+            //  gezegen 6
+
+            const jupiter = BABYLON.MeshBuilder.CreateSphere("jupiter", {
+
+                diameter: 40,
+
+               segments: 6
+
+            }, scene);
+
+            jupiter.position = new BABYLON.Vector3(-250, 0.5, 0)
+
+            const material2 = new BABYLON.StandardMaterial("jupiter", scene);
+
+            material2.diffuseColor = new BABYLON.Color3(0.6, 0.4, 0.2);
+
+            jupiter.material = material2;
+
+
+
+            scene.registerAfterRender(() => {
+
+                radius = 250;
+
+                angle = performance.now() / 10000;
+
+                x = light.position.x + radius * Math.cos(angle);
+
+                y = light.position.y;
+
+                z = light.position.z + radius * Math.sin(angle);
+
+                jupiter.position = new BABYLON.Vector3(x, y, z);
+
+            });
+
+            //  gezegen 7
+
+            const mars = BABYLON.MeshBuilder.CreateSphere("mars", {
+
+                diameter: 19,
+
+               segments: 6
+
+            }, scene);
+
+            mars.position = new BABYLON.Vector3(-110, 0.5, 0)
+
+            const material3 = new BABYLON.StandardMaterial("mars", scene);
+
+            material3.diffuseColor = new BABYLON.Color3(1, 0, 0);
+
+            mars.material = material3;
+
+
+            scene.registerAfterRender(() => {
+
+                radius = 200;
+
+                angle = performance.now() / 1800;
+
+
+                x = light.position.x + radius * Math.cos(angle);
+
+                y = light.position.y;
+
+                z = light.position.z + radius * Math.sin(angle);
+
+                mars.position = new BABYLON.Vector3(x, y, z);
+
+            });
+
+
+            //  gezegen 8
+
+            const venus = BABYLON.MeshBuilder.CreateSphere("venüs", {
+
+                diameter: 14,
+
+               segments: 6
+
+            }, scene);
+
+            venus.position = new BABYLON.Vector3(-150, 0.5, 0)
+
+            const material8 = new BABYLON.StandardMaterial("venüs", scene);
+
+            material8.diffuseColor = new BABYLON.Color3(0.2, 0.2, 0.7);
+
+            venus.material = material8;
+
+            scene.registerAfterRender(() => {
+
+                radius = 100;
+
+                angle = performance.now() / 2800;
+
+                x = light.position.x + radius * Math.cos(angle);
+
+                y = light.position.y;
+
+                z = light.position.z + radius * Math.sin(angle);
+
+                venus.position = new BABYLON.Vector3(x, y, z);
+
+            });
+
+
+
+
+
+            //  gezegen 10 
+
+
+            const neptun = BABYLON.MeshBuilder.CreateSphere("neptün", {
+
+                diameter: 20,
+
+               segments: 6,
+
+            }, scene);
+
+            neptun.position = new BABYLON.Vector3(-190, 0.5, 0)
+
+            const material4 = new BABYLON.StandardMaterial("neptün", scene);
+
+            material4.diffuseColor = new BABYLON.Color3(0.6, 0.4, 0.8);
+
+            neptun.material = material4;
+           
+            scene.registerAfterRender(() => {
+
+                radius = 450;
+
+                angle = performance.now() / 15000;
+
+                x = light.position.x + radius * Math.cos(angle);
+
+                y = light.position.y;
+
+                z = light.position.z + radius * Math.sin(angle);
+
+                neptun.position = new BABYLON.Vector3(x, y, z);
+
+            });
+
+            //  gezegen 11
+
+            const uranus = BABYLON.MeshBuilder.CreateSphere("uranüs", {
+
+                diameter: 18,
+
+               segments: 6
+
+            }, scene);
+
+            uranus.position = new BABYLON.Vector3(-90, 0.5, 0)
+
+            const material10 = new BABYLON.StandardMaterial("uranüs", scene);
+
+            material10.diffuseColor = new BABYLON.Color3(1, 2, 0);
+
+            uranus.material = material10;
+
+            scene.registerAfterRender(() => {
+
+                radius = 400;
+
+                angle = performance.now() / 16000;
+
+                x = light.position.x + radius * Math.cos(angle);
+
+                y = light.position.y;
+
+                z = light.position.z + radius * Math.sin(angle);
+
+                uranus.position = new BABYLON.Vector3(x, y, z);
+
+            });
+
+            // gölge
+
+                 const shadowGenerator = new BABYLON.ShadowGenerator(256, light);
+
+                 shadowGenerator.usePoissonSampling = true; // Gölge yumuşatmasını etkinleştirin
+
+                 shadowGenerator.addShadowCaster(merkür);
+
+                 merkür.receiveShadows = true;
+
+                 dunya.receiveShadows = true;
+
+                 venus.receiveShadows = true;
+
+                 saturn.receiveShadows = true;
+
+                 neptun.receiveShadows = true;
+
+                 pluton.receiveShadows = true;
+
+                 mars.receiveShadows = true;
+
+                 uranus.receiveShadows = true;
+
+                 jupiter.receiveShadows = true;
+
+
+              
+                scene.registerBeforeRender(() => {
+
+                shadowGenerator.getShadowMap().renderList.push(merkür);
+                
+                shadowGenerator.getShadowMap().renderList.push(dunya);
+           
+                shadowGenerator.getShadowMap().renderList.push(venus);
+           
+                shadowGenerator.getShadowMap().renderList.push(saturn);
+             
+                shadowGenerator.getShadowMap().renderList.push(neptun);
+           
+                shadowGenerator.getShadowMap().renderList.push(pluton);
+           
+                shadowGenerator.getShadowMap().renderList.push(mars);
+           
+                shadowGenerator.getShadowMap().renderList.push(jupiter);
+           
+                shadowGenerator.getShadowMap().renderList.push(uranus);
+
+                });
+
+
+
+
+
+
+
+
+            // 1. orbit
+
+            path = [];
+
+            radius = 150;
+
+            deltaTheta = 0.1;
+
+            y = 5;
+
+
+            for (let theta = 0; theta < 2 * Math.PI; theta += deltaTheta) {
+
+                path.push(new BABYLON.Vector3(radius * Math.cos(theta) + 50, y, radius * Math.sin(theta)));
+
+            }
+
+
+            path.push(path[0]);
+
+
+            marsorbit = BABYLON.MeshBuilder.CreateLines("orbit", {
+
+                points: path
+
+            }, scene);
+
+
+            // 2. orbit
+
+
+            path = [];
+
+            radius = 70;
+
+            deltaTheta = 0.1;
+
+            y = 5;
+
+
+            for (let theta = 0; theta < 2 * Math.PI; theta += deltaTheta) {
+
+                path.push(new BABYLON.Vector3(radius * Math.cos(theta) + 50, y, radius * Math.sin(theta)));
+
+            }
+
+
+            path.push(path[0]);
+
+
+            venusorbit = BABYLON.MeshBuilder.CreateLines("orbit", {
+
+                points: path
+
+            }, scene);
+
+
+
+
+
+            // 4. orbit
+
+
+            path = [];
+
+            radius = 100;
+
+            deltaTheta = 0.1;
+
+            y = 5;
+
+
+            for (let theta = 0; theta < 2 * Math.PI; theta += deltaTheta) {
+
+                path.push(new BABYLON.Vector3(radius * Math.cos(theta) + 50, y, radius * Math.sin(theta)));
+
+            }
+
+
+            path.push(path[0]);
+
+
+            marsorbit = BABYLON.MeshBuilder.CreateLines("orbit", {
+
+                points: path
+
+            }, scene);
+
+            // 5. orbit
+
+            path = [];
+
+            radius = 200;
+
+            deltaTheta = 0.1;
+
+            y = 5;
+
+
+            for (let theta = 0; theta < 2 * Math.PI; theta += deltaTheta) {
+
+                path.push(new BABYLON.Vector3(radius * Math.cos(theta) + 50, y, radius * Math.sin(theta)));
+
+            }
+
+
+            path.push(path[0]);
+
+
+            marsorbit = BABYLON.MeshBuilder.CreateLines("orbit", {
+
+                points: path
+
+            }, scene);
+
+
+            // 6. orbit
+
+            path = [];
+
+            radius = 250;
+
+            deltaTheta = 0.1;
+
+            y = 5;
+
+
+            for (let theta = 0; theta < 2 * Math.PI; theta += deltaTheta) {
+
+                path.push(new BABYLON.Vector3(radius * Math.cos(theta) + 50, y, radius * Math.sin(theta)));
+
+            }
+
+
+            path.push(path[0]);
+
+
+            jupiterorbit = BABYLON.MeshBuilder.CreateLines("orbit", {
+
+                points: path
+
+            }, scene);
+
+            // 7. orbit
+
+            path = [];
+
+            radius = 340;
+
+            deltaTheta = 0.1;
+
+            y = 5;
+
+
+            for (let theta = 0; theta < 2 * Math.PI; theta += deltaTheta) {
+
+                path.push(new BABYLON.Vector3(radius * Math.cos(theta) + 50, y, radius * Math.sin(theta)));
+
+            }
+
+
+            path.push(path[0]);
+
+
+            saturnorbit = BABYLON.MeshBuilder.CreateLines("orbit", {
+
+                points: path
+
+            }, scene);
+
+
+
+            // 8. orbit
+
+            path = [];
+
+            radius = 400;
+
+            deltaTheta = 0.1;
+
+            y = 5;
+
+
+            for (let theta = 0; theta < 2 * Math.PI; theta += deltaTheta) {
+
+                path.push(new BABYLON.Vector3(radius * Math.cos(theta) + 50, y, radius * Math.sin(theta)));
+
+            }
+
+
+            path.push(path[0]);
+
+
+            uranusorbit = BABYLON.MeshBuilder.CreateLines("orbit", {
+
+                points: path
+
+            }, scene);
+
+
+            // 9. orbit
+
+            path = [];
+
+            radius = 450;
+
+            deltaTheta = 0.1;
+
+            y = 5;
+
+
+            for (let theta = 0; theta < 2 * Math.PI; theta += deltaTheta) {
+
+                path.push(new BABYLON.Vector3(radius * Math.cos(theta) + 50, y, radius * Math.sin(theta)));
+
+            }
+
+
+            path.push(path[0]);
+
+
+            neptunorbit = BABYLON.MeshBuilder.CreateLines("orbit", {
+
+                points: path
+
+            }, scene);
+
+            // 10. orbit
+
+
+            orbit = BABYLON.MeshBuilder.CreateLines("orbit", {
+
+                points: path
+
+            }, scene);
+
+            path = [];
+
+            radius = 500;
+
+            deltaTheta = 0.1;
+
+            y = 5;
+
+
+            for (let theta = 0; theta < 2 * Math.PI; theta += deltaTheta) {
+
+                path.push(new BABYLON.Vector3(radius * Math.cos(theta) + 50, y, radius * Math.sin(theta)));
+
+            }
+
+
+            path.push(path[0]);
+
+
+            plutonorbit = BABYLON.MeshBuilder.CreateLines("orbit", {
+
+                points: path
+
+
+
+
+            }, scene);
+
+            // bitti
+
+
+            return scene;
+        };
+
+        const scene = createScene(); //createScene işlevini çağırın
+
+
+
+        // Sahneyi tekrar tekrar işlemek için bir işleme döngüsü kaydedin
+
+        engine.runRenderLoop(function () {
+
+
+
+            // BURAYA ANİMASYON GELECEK
+
+
+
+
+            scene.render();
+        });
+
+        // Tarayıcı/tuval yeniden boyutlandırma olaylarını izleyin
+
+        window.addEventListener("resize", function () {
+
+            engine.resize();
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Babylon Template</title>
+
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+
+</head>
+
+<body>
+
+    <canvas id="renderCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById("renderCanvas"); // Kanvas öğesini alın
+
+        const engine = new BABYLON.Engine(canvas, true); // BABYLON 3D motorunu oluştur
+
+
+
+        function createScene() {
+
+            // Temel bir Babylon Scene nesnesi oluşturur
+            const scene = new BABYLON.Scene(engine);
+
+            // Boş bir kamera oluşturur ve konumlandırır
+            const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(2, 5, -30), scene);
+
+            // Kamerayı sahne kaynağına hedefler
+            camera.setTarget(BABYLON.Vector3.Zero());
+
+
+            // Bu, kamerayı tuvale ekler
+            camera.attachControl(canvas, true);
+
+            // Gökyüzüne 0,1,0 hedefleyen bir ışık oluşturur
+            const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+            // Işığı az miktarda kısın - 0'dan 1'e
+            light.intensity = 0.5;
+
+
+
+
+
+            // BURAYA OBJELER GELECEK
+
+            const rectWidth = 5;
+
+            const rectHeight = 1.1;
+
+            const rectDepth = 2;
+
+            const rect = BABYLON.MeshBuilder.CreateBox("rect", {
+
+                width: rectWidth,
+
+                height: rectHeight,
+
+                depth: rectDepth
+
+            }, scene);
+
+            rect.position = new BABYLON.Vector3(0, 0.6, 0);
+
+            const rectMaterial = new BABYLON.StandardMaterial("rectMaterial", scene);
+
+            rectMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+
+            rect.material = rectMaterial;
+           
+           
+           
+           
+            const box = BABYLON.MeshBuilder.CreateBox("box", {
+
+                diameter: 5,
+
+                segments: 12
+            }, scene);
+
+            box.position = new BABYLON.Vector3(0, 1, 0)
+
+            const material2 = new BABYLON.StandardMaterial("box", scene);
+
+            material2.diffuseColor = new BABYLON.Color3(0.2, 0.4, 0.2);
+
+            box.material = material2;
+
+            box.parent = rect;
+           
+            const cone = BABYLON.MeshBuilder.CreateCylinder("cone", {
+               
+                height: 3
+           
+            }, scene);
+            
+            cone.position = new BABYLON.Vector3(2, -0.1, 0);
+            
+            cone.rotation.x = Math.PI / 2;
+            
+            const material1 = new BABYLON.StandardMaterial("cone", scene);
+            
+            material1.diffuseColor = new BABYLON.Color3(0.8, 0.2, 0.2);
+            
+            cone.material = material1;
+
+            cone.parent = rect;
+
+
+            const cone2 = BABYLON.MeshBuilder.CreateCylinder("cone", {
+            
+                height: 3
+            
+            }, scene);
+            
+            cone2.position = new BABYLON.Vector3(-2, -0.1, 0);
+            
+            cone2.rotation.x = Math.PI / 2;
+            
+            const material3 = new BABYLON.StandardMaterial("cone2", scene);
+            
+            material3.diffuseColor = new BABYLON.Color3(0.1, 0.3, 0.5);
+            
+            cone2.material = material3;
+
+            cone2.parent = rect;
+
+
+
+
+
+
+            const ground = BABYLON.MeshBuilder.CreateGround("ground", {
+
+                width: 10,
+
+                height: 10
+
+            }, scene);
+
+
+
+            return scene;
+        };
+
+
+        const scene = createScene(); //createScene işlevini çağırın
+
+        // Sahneyi tekrar tekrar işlemek için bir işleme döngüsü kaydedin
+        engine.runRenderLoop(function () {
+
+
+
+
+
+            // BURAYA ANİMASYON GELECEK
+
+
+
+
+
+            scene.render();
+        });
+
+        // Tarayıcı/tuval yeniden boyutlandırma olaylarını izleyin
+
+        window.addEventListener("resize", function () {
+
+            engine.resize();
+        });
+    </script>
+
+</body>
+
+</html>
